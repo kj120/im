@@ -4,6 +4,7 @@ import cn.kj120.im.client.handler.ReadHandler;
 import cn.kj120.im.common.codec.StringToMessageDecoder;
 import cn.kj120.im.common.codec.MessageToStringEncoder;
 import cn.kj120.im.common.message.Message;
+import cn.kj120.im.common.message.MessageType;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -64,6 +65,7 @@ public class NioClient implements Client {
         }
     }
 
+
     @Override
     public void send(String message, String to) {
         sendBatch(message, Arrays.asList(to));
@@ -71,13 +73,19 @@ public class NioClient implements Client {
 
     @Override
     public void sendBatch(String message, List<String> tos) {
-        if (channel == null) {
-            new RuntimeException("未连接上服务器");
-        }
         Message serverMessage = new Message();
         serverMessage.setTos(tos);
         serverMessage.setBody(message);
-        channel.writeAndFlush(serverMessage);
+        send(serverMessage);
+    }
+
+    @Override
+    public void sendAll(String message) {
+        Message serverMessage = new Message();
+        serverMessage.setMessageType(MessageType.ALL);
+        serverMessage.setBody(message);
+
+        send(serverMessage);
     }
 
     @Override
@@ -101,6 +109,13 @@ public class NioClient implements Client {
         if (channel != null) {
             channel.close();
         }
+    }
+
+    private void send(Message message) {
+        if (channel == null) {
+            new RuntimeException("未连接上服务器");
+        }
+        channel.writeAndFlush(message);
     }
 
     public static void main(String[] args) {

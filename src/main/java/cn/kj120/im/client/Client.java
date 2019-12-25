@@ -12,6 +12,8 @@ public interface Client {
 
     void sendBatch(String message, List<String> tos);
 
+    void sendAll(String message);
+
     void onMessage(Message message);
 
     void onOpen(String host, int port);
