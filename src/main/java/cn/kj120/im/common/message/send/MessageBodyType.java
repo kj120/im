@@ -1,6 +1,4 @@
-package cn.kj120.im.common.message;
-
-import cn.kj120.im.common.message.MessageException;
+package cn.kj120.im.common.message.send;
 
 /**
  * 消息体类型

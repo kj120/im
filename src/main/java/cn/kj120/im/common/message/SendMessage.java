@@ -1,5 +1,6 @@
 package cn.kj120.im.common.message;
 
+import cn.kj120.im.common.message.send.SendMessageType;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @date 2019-12-23 17:32:05
  */
 @Data
-public class Message {
+public class SendMessage {
 
     /**
      * 发送者唯一标识
@@ -25,7 +26,7 @@ public class Message {
     /**
      * 消息类型
      */
-    private MessageType messageType;
+    private SendMessageType sendMessageType;
 
     /**
      * 消息体

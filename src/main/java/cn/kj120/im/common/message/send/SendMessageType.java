@@ -1,11 +1,11 @@
-package cn.kj120.im.common.message;
+package cn.kj120.im.common.message.send;
 
 /**
  * 消息类型
  * @author pcg
  * @date 2019-12-23 17:57:40
  */
-public enum MessageType {
+public enum SendMessageType {
     /**
      * 单播 (一对一消息)
      */

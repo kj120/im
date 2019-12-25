@@ -1,4 +1,4 @@
-package cn.kj120.im.common.message;
+package cn.kj120.im.common.message.send;
 
 /**
  * 消息相关异常

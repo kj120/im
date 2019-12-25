@@ -3,8 +3,8 @@ package cn.kj120.im.client;
 import cn.kj120.im.client.handler.ReadHandler;
 import cn.kj120.im.common.codec.StringToMessageDecoder;
 import cn.kj120.im.common.codec.MessageToStringEncoder;
-import cn.kj120.im.common.message.Message;
-import cn.kj120.im.common.message.MessageType;
+import cn.kj120.im.common.message.SendMessage;
+import cn.kj120.im.common.message.send.SendMessageType;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -12,10 +12,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
-import io.netty.util.concurrent.Future;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -73,24 +71,24 @@ public class NioClient implements Client {
 
     @Override
     public void sendBatch(String message, List<String> tos) {
-        Message serverMessage = new Message();
-        serverMessage.setTos(tos);
-        serverMessage.setBody(message);
-        send(serverMessage);
+        SendMessage serverSendMessage = new SendMessage();
+        serverSendMessage.setTos(tos);
+        serverSendMessage.setBody(message);
+        send(serverSendMessage);
     }
 
     @Override
     public void sendAll(String message) {
-        Message serverMessage = new Message();
-        serverMessage.setMessageType(MessageType.ALL);
-        serverMessage.setBody(message);
+        SendMessage serverSendMessage = new SendMessage();
+        serverSendMessage.setSendMessageType(SendMessageType.ALL);
+        serverSendMessage.setBody(message);
 
-        send(serverMessage);
+        send(serverSendMessage);
     }
 
     @Override
-    public void onMessage(Message message) {
-        log.info("receive message :  {}", message);
+    public void onMessage(SendMessage sendMessage) {
+        log.info("receive sendMessage :  {}", sendMessage);
     }
 
     @Override
@@ -111,11 +109,11 @@ public class NioClient implements Client {
         }
     }
 
-    private void send(Message message) {
+    private void send(SendMessage sendMessage) {
         if (channel == null) {
             new RuntimeException("未连接上服务器");
         }
-        channel.writeAndFlush(message);
+        channel.writeAndFlush(sendMessage);
     }
 
     public static void main(String[] args) {

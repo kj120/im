@@ -1,11 +1,11 @@
 package cn.kj120.im.client.handler;
 
 import cn.kj120.im.client.Client;
-import cn.kj120.im.common.message.Message;
+import cn.kj120.im.common.message.SendMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-public class ReadHandler extends SimpleChannelInboundHandler<Message> {
+public class ReadHandler extends SimpleChannelInboundHandler<SendMessage> {
 
     private Client client;
 
@@ -14,7 +14,7 @@ public class ReadHandler extends SimpleChannelInboundHandler<Message> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Message message) throws Exception {
-        client.onMessage(message);
+    protected void channelRead0(ChannelHandlerContext ctx, SendMessage sendMessage) throws Exception {
+        client.onMessage(sendMessage);
     }
 }
