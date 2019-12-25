@@ -11,22 +11,28 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.concurrent.Future;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 @Slf4j
-public class NioClient {
+public class NioClient implements Client {
 
     private EventLoopGroup work = new NioEventLoopGroup();
 
     private Channel channel;
 
+    @Override
     public void connect(String host, int port) {
         try {
             Bootstrap bootstrap = new Bootstrap();
+
+            ReadHandler readHandler = new ReadHandler(this);
+
             bootstrap.group(work)
                     .channel(NioSocketChannel.class)
                     .handler(new ChannelInitializer<SocketChannel>() {
@@ -37,7 +43,7 @@ public class NioClient {
                                     .addLast("decode", new StringDecoder())
                                     .addAfter("decode", "messageDe",new StringToMessageDecoder())
                                     .addAfter("encode", "messageEn",new MessageToStringEncoder())
-                                    .addLast(new ReadHandler());
+                                    .addLast(readHandler);
                         }
                     });
 
@@ -58,6 +64,45 @@ public class NioClient {
         }
     }
 
+    @Override
+    public void send(String message, String to) {
+        sendBatch(message, Arrays.asList(to));
+    }
+
+    @Override
+    public void sendBatch(String message, List<String> tos) {
+        if (channel == null) {
+            new RuntimeException("未连接上服务器");
+        }
+        Message serverMessage = new Message();
+        serverMessage.setTos(tos);
+        serverMessage.setBody(message);
+        channel.writeAndFlush(serverMessage);
+    }
+
+    @Override
+    public void onMessage(Message message) {
+        log.info("receive message :  {}", message);
+    }
+
+    @Override
+    public void onOpen(String host, int port) {
+        log.info("连接上服务器了, 服务器地址: {}  IP: {}", host, port);
+    }
+
+    @Override
+    public void onError(String error) {
+        log.error(error);
+    }
+
+    @Override
+    public void onClose() {
+        work.shutdownGracefully();
+        if (channel != null) {
+            channel.close();
+        }
+    }
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -72,12 +117,7 @@ public class NioClient {
 
         while (scanner.hasNext()) {
             String to = scanner.nextLine();
-            Message message = new Message();
-            List<String> list = new ArrayList<>();
-            list.add(to);
-            message.setTos(list);
-            message.setBody("hhhhhhh");
-            client.channel.writeAndFlush(message);
+            client.send("哈喽", to);
         }
 
     }

@@ -18,7 +18,6 @@ public class StringToMessageDecoder extends MessageToMessageDecoder<String> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, String message, List<Object> list) throws Exception {
-        System.err.println(message);
         Message msg = JSONObject.parseObject(message, Message.class);
         list.add(msg);
     }
