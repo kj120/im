@@ -17,6 +17,7 @@ public class ActiveHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         cacheManage.put(ctx.channel().id().toString(), ctx);
+        ctx.writeAndFlush("服务器接受客户端链接");
         super.channelActive(ctx);
     }
 }
