@@ -1,8 +1,9 @@
 package cn.kj120.im.client;
 
 import cn.kj120.im.client.handler.ReadHandler;
-import cn.kj120.im.common.codec.MessageDecoder;
-import cn.kj120.im.common.codec.MessageEncoder;
+import cn.kj120.im.common.codec.StringToMessageDecoder;
+import cn.kj120.im.common.codec.MessageToStringEncoder;
+import cn.kj120.im.common.message.Message;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -12,6 +13,8 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 @Slf4j
@@ -32,6 +35,8 @@ public class NioClient {
                             socketChannel.pipeline()
                                     .addLast("encode", new StringEncoder())
                                     .addLast("decode", new StringDecoder())
+                                    .addAfter("decode", "messageDe",new StringToMessageDecoder())
+                                    .addAfter("encode", "messageEn",new MessageToStringEncoder())
                                     .addLast(new ReadHandler());
                         }
                     });
@@ -66,8 +71,13 @@ public class NioClient {
         }.start();
 
         while (scanner.hasNext()) {
-            String msg = scanner.nextLine();
-            client.channel.writeAndFlush(msg);
+            String to = scanner.nextLine();
+            Message message = new Message();
+            List<String> list = new ArrayList<>();
+            list.add(to);
+            message.setTos(list);
+            message.setBody("hhhhhhh");
+            client.channel.writeAndFlush(message);
         }
 
     }
