@@ -1,6 +1,7 @@
 package cn.kj120.im.client;
 
-import cn.kj120.im.common.message.SendMessage;
+import cn.kj120.im.common.message.receive.ReceiveMessage;
+import cn.kj120.im.common.message.send.SendMessage;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface Client {
 
     void sendAll(String message);
 
-    void onMessage(SendMessage sendMessage);
+    void onMessage(ReceiveMessage message);
 
     void onOpen(String host, int port);
 

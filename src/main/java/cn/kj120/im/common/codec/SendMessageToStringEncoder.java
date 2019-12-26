@@ -1,13 +1,13 @@
 package cn.kj120.im.common.codec;
 
-import cn.kj120.im.common.message.SendMessage;
+import cn.kj120.im.common.message.send.SendMessage;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 
 import java.util.List;
 
-public class MessageToStringEncoder extends MessageToMessageEncoder<SendMessage> {
+public class SendMessageToStringEncoder extends MessageToMessageEncoder<SendMessage> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, SendMessage sendMessage, List<Object> list) throws Exception {

@@ -1,7 +1,8 @@
 package cn.kj120.im.server;
 
-import cn.kj120.im.common.codec.StringToMessageDecoder;
-import cn.kj120.im.common.codec.MessageToStringEncoder;
+import cn.kj120.im.common.codec.ReceiveMessageToStringEncoder;
+import cn.kj120.im.common.codec.StringToSendMessageDecoder;
+import cn.kj120.im.common.codec.SendMessageToStringEncoder;
 import cn.kj120.im.server.handler.ActiveHandler;
 import cn.kj120.im.server.handler.ExceptionHandler;
 import cn.kj120.im.server.handler.ReadHandler;
@@ -44,8 +45,8 @@ public class NioServer implements Server {
                         channel.pipeline()
                                 .addLast("encode", new StringEncoder())
                                 .addLast("decode", new StringDecoder())
-                                .addAfter("decode", "messageDe",new StringToMessageDecoder())
-                                .addAfter("encode", "messageEn",new MessageToStringEncoder())
+                                .addAfter("decode", "messageDe",new StringToSendMessageDecoder())
+                                .addAfter("encode", "messageEn",new ReceiveMessageToStringEncoder())
                                 .addLast(new ExceptionHandler())
                                 .addLast(new ActiveHandler())
                                 .addLast(new ReadHandler());

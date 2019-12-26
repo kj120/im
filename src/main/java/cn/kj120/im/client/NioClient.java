@@ -1,9 +1,11 @@
 package cn.kj120.im.client;
 
 import cn.kj120.im.client.handler.ReadHandler;
-import cn.kj120.im.common.codec.StringToMessageDecoder;
-import cn.kj120.im.common.codec.MessageToStringEncoder;
-import cn.kj120.im.common.message.SendMessage;
+import cn.kj120.im.common.codec.StringToReceiveMessageDecoder;
+import cn.kj120.im.common.codec.StringToSendMessageDecoder;
+import cn.kj120.im.common.codec.SendMessageToStringEncoder;
+import cn.kj120.im.common.message.receive.ReceiveMessage;
+import cn.kj120.im.common.message.send.SendMessage;
 import cn.kj120.im.common.message.send.SendMessageType;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -40,8 +42,8 @@ public class NioClient implements Client {
                             socketChannel.pipeline()
                                     .addLast("encode", new StringEncoder())
                                     .addLast("decode", new StringDecoder())
-                                    .addAfter("decode", "messageDe",new StringToMessageDecoder())
-                                    .addAfter("encode", "messageEn",new MessageToStringEncoder())
+                                    .addAfter("decode", "messageDe",new StringToReceiveMessageDecoder())
+                                    .addAfter("encode", "messageEn",new SendMessageToStringEncoder())
                                     .addLast(readHandler);
                         }
                     });
@@ -87,8 +89,8 @@ public class NioClient implements Client {
     }
 
     @Override
-    public void onMessage(SendMessage sendMessage) {
-        log.info("receive sendMessage :  {}", sendMessage);
+    public void onMessage(ReceiveMessage message) {
+        log.info("接收 receive sendMessage :  {}", message);
     }
 
     @Override

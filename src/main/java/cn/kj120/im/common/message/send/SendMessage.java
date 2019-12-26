@@ -1,4 +1,4 @@
-package cn.kj120.im.common.message;
+package cn.kj120.im.common.message.send;
 
 import cn.kj120.im.common.message.send.SendMessageType;
 import lombok.Data;
