@@ -2,11 +2,10 @@ package cn.kj120.im.client;
 
 import cn.kj120.im.client.handler.ReadHandler;
 import cn.kj120.im.common.codec.StringToReceiveMessageDecoder;
-import cn.kj120.im.common.codec.StringToSendMessageDecoder;
 import cn.kj120.im.common.codec.SendMessageToStringEncoder;
-import cn.kj120.im.common.message.receive.ReceiveMessage;
-import cn.kj120.im.common.message.send.SendMessage;
-import cn.kj120.im.common.message.send.SendMessageType;
+import cn.kj120.im.common.message.ReceiveMessage;
+import cn.kj120.im.common.message.SendMessage;
+import cn.kj120.im.common.message.SendMessageType;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -132,7 +131,7 @@ public class NioClient implements Client {
 
         while (scanner.hasNext()) {
             String to = scanner.nextLine();
-            client.send("哈喽", to);
+            client.sendAll(to);
         }
 
     }

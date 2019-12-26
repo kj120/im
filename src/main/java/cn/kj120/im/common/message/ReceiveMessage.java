@@ -1,4 +1,4 @@
-package cn.kj120.im.common.message.receive;
+package cn.kj120.im.common.message;
 
 import lombok.Data;
 

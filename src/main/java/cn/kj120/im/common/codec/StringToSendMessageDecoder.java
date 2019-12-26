@@ -1,6 +1,6 @@
 package cn.kj120.im.common.codec;
 
-import cn.kj120.im.common.message.send.SendMessage;
+import cn.kj120.im.common.message.SendMessage;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;

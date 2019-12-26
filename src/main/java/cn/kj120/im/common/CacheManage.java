@@ -1,5 +1,7 @@
 package cn.kj120.im.common;
 
+import java.util.Map;
+
 /**
  * 缓存管理
  * @param <K> 缓存键
@@ -42,4 +44,10 @@ public interface CacheManage<K, V> {
      * 清除所有缓存
      */
     void clear();
+
+    /**
+     * 获取所有缓存信息
+     * @return
+     */
+    Map<K,V> getAll();
 }

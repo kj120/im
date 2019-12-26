@@ -1,6 +1,5 @@
-package cn.kj120.im.common.message.send;
+package cn.kj120.im.common.message;
 
-import cn.kj120.im.common.message.send.SendMessageType;
 import lombok.Data;
 
 import java.util.List;

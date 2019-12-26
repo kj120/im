@@ -1,7 +1,6 @@
 package cn.kj120.im.client;
 
-import cn.kj120.im.common.message.receive.ReceiveMessage;
-import cn.kj120.im.common.message.send.SendMessage;
+import cn.kj120.im.common.message.ReceiveMessage;
 
 import java.util.List;
 

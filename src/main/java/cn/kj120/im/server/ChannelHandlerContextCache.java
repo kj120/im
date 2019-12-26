@@ -4,6 +4,7 @@ import cn.kj120.im.common.CacheManage;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -11,7 +12,7 @@ public class ChannelHandlerContextCache implements CacheManage<String, ChannelHa
 
     private ConcurrentHashMap<String, ChannelHandlerContext> concurrentHashMap = new ConcurrentHashMap<>();
 
-    public final static CacheManage<String, ChannelHandlerContext> INSTANCE = new ChannelHandlerContextCache();
+    private final static CacheManage<String, ChannelHandlerContext> INSTANCE = new ChannelHandlerContextCache();
 
     public static CacheManage<String, ChannelHandlerContext> singleten() {
         return INSTANCE;
@@ -45,5 +46,8 @@ public class ChannelHandlerContextCache implements CacheManage<String, ChannelHa
         concurrentHashMap.clear();
     }
 
-
+    @Override
+    public Map<String, ChannelHandlerContext> getAll() {
+        return concurrentHashMap;
+    }
 }
