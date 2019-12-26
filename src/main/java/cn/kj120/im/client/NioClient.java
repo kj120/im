@@ -1,18 +1,12 @@
 package cn.kj120.im.client;
 
-import cn.kj120.im.client.handler.ReadHandler;
-import cn.kj120.im.common.codec.StringToReceiveMessageDecoder;
-import cn.kj120.im.common.codec.SendMessageToStringEncoder;
 import cn.kj120.im.common.message.ReceiveMessage;
 import cn.kj120.im.common.message.SendMessage;
 import cn.kj120.im.common.message.SendMessageType;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -24,44 +18,33 @@ public class NioClient implements Client {
 
     private EventLoopGroup work = new NioEventLoopGroup();
 
+    private ChannelInitializer<Channel> channelInitializer;
+
     private Channel channel;
 
+    {
+        channelInitializer = new DefaultChannelInitializer(this);
+    }
+
     @Override
-    public void connect(String host, int port) {
-        try {
-            Bootstrap bootstrap = new Bootstrap();
+    public void connect(String host, int port) throws InterruptedException{
+        Bootstrap bootstrap = new Bootstrap();
 
-            ReadHandler readHandler = new ReadHandler(this);
+        bootstrap.group(work)
+                .channel(NioSocketChannel.class)
+                .handler(channelInitializer);
 
-            bootstrap.group(work)
-                    .channel(NioSocketChannel.class)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline()
-                                    .addLast("encode", new StringEncoder())
-                                    .addLast("decode", new StringDecoder())
-                                    .addAfter("decode", "messageDe",new StringToReceiveMessageDecoder())
-                                    .addAfter("encode", "messageEn",new SendMessageToStringEncoder())
-                                    .addLast(readHandler);
-                        }
-                    });
+        ChannelFuture sync = bootstrap.connect(host, port).sync();
 
-            ChannelFuture sync = bootstrap.connect(host, port).sync();
-
-            sync.addListener(future -> {
-                if (future.isSuccess()) {
-                    channel = sync.channel();
-                    log.info("连接上服务器了, 服务器地址: {}  IP: {}", host, port);
-                } else {
-                    System.err.println("链接失败: " + future.cause().getMessage());
-                }
-            });
-
-            sync.channel().closeFuture().sync();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        sync.addListener(future -> {
+            if (future.isSuccess()) {
+                channel = sync.channel();
+                log.info("连接上服务器了, 服务器地址: {}  IP: {}", host, port);
+            } else {
+                System.err.println("链接失败: " + future.cause().getMessage());
+            }
+        });
+        sync.channel().closeFuture().sync();
     }
 
 
@@ -125,7 +108,11 @@ public class NioClient implements Client {
         new Thread() {
             @Override
             public void run() {
-                client.connect("127.0.0.1", 996);
+                try {
+                    client.connect("127.0.0.1", 996);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
 

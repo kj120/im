@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface Client {
 
-    void connect(String host, int port);
+    void connect(String host, int port) throws InterruptedException;
 
     void send(String message, String to);
 
