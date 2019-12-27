@@ -3,7 +3,7 @@ package cn.kj120.im.server.handler;
 import cn.kj120.im.common.CacheManage;
 import cn.kj120.im.common.message.ReceiveMessage;
 import cn.kj120.im.common.message.SendMessage;
-import cn.kj120.im.server.ChannelHandlerContextCache;
+import cn.kj120.im.server.store.ChannelHandlerContextCache;
 import cn.kj120.im.server.config.ChannelAttr;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
-import java.util.logging.Handler;
 
 @Slf4j
 public class ReadHandler extends SimpleChannelInboundHandler<SendMessage> {
@@ -53,7 +52,7 @@ public class ReadHandler extends SimpleChannelInboundHandler<SendMessage> {
 
     public ReceiveMessage getReceiveMessage(ChannelHandlerContext ctx, SendMessage msg) {
         ReceiveMessage receiveMessage = new ReceiveMessage();
-        receiveMessage.setFrom(ctx.channel().attr(ChannelAttr.SESSION_ID).get());
+        receiveMessage.setFrom(ctx.channel().attr(ChannelAttr.SESSION).get().getSessionId());
         receiveMessage.setBody(msg.getBody() + new Random().nextInt(100));
         return receiveMessage;
     }

@@ -1,8 +1,8 @@
 package cn.kj120.im.server.handler;
 
 import cn.kj120.im.common.CacheManage;
-import cn.kj120.im.server.ChannelHandlerContextCache;
-import cn.kj120.im.server.Session;
+import cn.kj120.im.server.store.ChannelHandlerContextCache;
+import cn.kj120.im.server.config.Session;
 import cn.kj120.im.server.config.ChannelAttr;
 import cn.kj120.im.server.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;

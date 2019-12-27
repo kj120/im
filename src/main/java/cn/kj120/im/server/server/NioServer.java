@@ -1,7 +1,11 @@
-package cn.kj120.im.server;
+package cn.kj120.im.server.server;
 
+import cn.kj120.im.server.init.DefaultChannelInitializer;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +30,8 @@ public class NioServer implements Server {
     }
 
     @Override
-    public void start(int port) {
-        try {
+    public void start(int port) throws InterruptedException {
+
         boss = new NioEventLoopGroup();
         work = new NioEventLoopGroup();
 
@@ -44,11 +48,6 @@ public class NioServer implements Server {
                log.error("服务器启动失败: {}", future.cause().getMessage());
            }
         });
-
-        sync.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

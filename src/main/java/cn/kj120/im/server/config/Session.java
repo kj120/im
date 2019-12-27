@@ -1,4 +1,4 @@
-package cn.kj120.im.server;
+package cn.kj120.im.server.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * 会话信息
+ * @author pcg
  * @param <T> 其他业务数据
  */
 @Data

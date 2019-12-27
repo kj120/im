@@ -1,4 +1,4 @@
-package cn.kj120.im.server;
+package cn.kj120.im.server.store;
 
 import cn.kj120.im.common.CacheManage;
 import io.netty.channel.ChannelHandlerContext;
