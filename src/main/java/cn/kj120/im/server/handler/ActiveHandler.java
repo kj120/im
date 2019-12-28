@@ -33,7 +33,6 @@ public class ActiveHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // 客户端连接上10秒后未授权断开连接
-//        ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
         scheduledExecutorService.schedule(new CheckNoAuthorization(ctx.channel()), 10, TimeUnit.SECONDS);
         super.channelActive(ctx);
     }

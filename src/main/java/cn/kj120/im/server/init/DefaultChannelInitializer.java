@@ -2,25 +2,14 @@ package cn.kj120.im.server.init;
 
 import cn.kj120.im.common.codec.ReceiveMessageToStringEncoder;
 import cn.kj120.im.common.codec.StringToSendMessageDecoder;
-import cn.kj120.im.common.message.SendMessage;
-import cn.kj120.im.server.handler.ActiveHandler;
-import cn.kj120.im.server.handler.AuthorizationHandler;
-import cn.kj120.im.server.handler.ExceptionHandler;
-import cn.kj120.im.server.handler.ReadHandler;
 import io.netty.channel.*;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
-import lombok.Builder;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.nio.charset.Charset;
-import java.util.List;
-
 
 @Component
 @Data
@@ -32,7 +21,7 @@ public class DefaultChannelInitializer extends ChannelInitializer<Channel> {
     @Resource
     private ChannelHandler stringDecoder;
 
-    @Autowired
+    @Resource
     private ChannelHandler stringEncoder;
 
     @Resource

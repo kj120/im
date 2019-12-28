@@ -30,7 +30,6 @@ public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.err.println(msg);
         if (!SessionUtil.isAuth(ctx.channel())) {
             SendMessage sendMessage = (SendMessage) msg;
             Session session = authorization.auth(sendMessage.getBody());

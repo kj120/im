@@ -1,10 +1,8 @@
 package cn.kj120.im.server.handler;
 
-import cn.kj120.im.common.CacheManage;
 import cn.kj120.im.common.message.ReceiveMessage;
 import cn.kj120.im.common.message.SendMessage;
 import cn.kj120.im.server.store.ChannelGroupStore;
-import cn.kj120.im.server.store.ChannelHandlerContextCache;
 import cn.kj120.im.server.config.ChannelAttr;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -32,19 +30,19 @@ public class ReadHandler extends SimpleChannelInboundHandler<SendMessage> {
 
         ReceiveMessage receiveMessage = getReceiveMessage(ctx.channel(), msg);
 
-        Collection<Channel> ctxs = new ArrayList<>();
+        Collection<Channel> channels = new ArrayList<>();
         switch (msg.getSendMessageType()) {
             case UNICAST:
                 msg.getTos().forEach(sessionId -> {
-                    ctxs.add(channelGroupStore.get(sessionId));
+                    channels.add(channelGroupStore.get(sessionId));
                 });
-                forward(ctxs, receiveMessage);
+                forward(channels, receiveMessage);
                 break;
             case MULTICAST:
                 msg.getTos().forEach(sessionId ->
-                    ctxs.add(channelGroupStore.get(sessionId))
+                    channels.add(channelGroupStore.get(sessionId))
                 );
-                forward(ctxs, receiveMessage);
+                forward(channels, receiveMessage);
                 break;
             case ALL:
                 forward(channelGroupStore.getAll(), receiveMessage);

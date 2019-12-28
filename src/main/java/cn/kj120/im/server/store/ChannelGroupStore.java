@@ -3,8 +3,7 @@ package cn.kj120.im.server.store;
 import io.netty.channel.Channel;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+
 
 public interface ChannelGroupStore {
 
