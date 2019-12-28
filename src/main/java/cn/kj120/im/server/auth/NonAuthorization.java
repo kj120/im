@@ -16,4 +16,9 @@ public class NonAuthorization implements Authorization<String> {
         log.info("授权字符串: {}", authString);
         return new Session(SessionUtil.createSessionId(), new Date());
     }
+
+    @Override
+    public void bind(String authString, String sessionId) {
+        log.info("授权字符串: {} , sessionId: {} 绑定成功", authString, sessionId);
+    }
 }

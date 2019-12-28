@@ -22,4 +22,6 @@ public interface ChannelGroupStore {
     boolean remove(String sessionId);
 
     void clear();
+
+    int size();
 }

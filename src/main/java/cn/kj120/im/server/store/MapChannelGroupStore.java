@@ -82,4 +82,9 @@ public class MapChannelGroupStore implements ChannelGroupStore {
     public void clear() {
         channelGroup.clear();
     }
+
+    @Override
+    public int size() {
+        return channelGroup.size();
+    }
 }

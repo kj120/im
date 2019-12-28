@@ -17,6 +17,5 @@ public class StringToSendMessageDecoder extends MessageToMessageDecoder<String> 
     protected void decode(ChannelHandlerContext ctx, String message, List<Object> list) throws Exception {
         SendMessage msg = JSONObject.parseObject(message, SendMessage.class);
         list.add(msg);
-        log.error(ctx.pipeline().toString());
     }
 }

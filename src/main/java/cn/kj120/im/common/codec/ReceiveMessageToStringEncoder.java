@@ -17,6 +17,5 @@ public class ReceiveMessageToStringEncoder extends MessageToMessageEncoder<Recei
     protected void encode(ChannelHandlerContext ctx, ReceiveMessage receiveMessage, List<Object> list) throws Exception {
         String msg = JSONObject.toJSONString(receiveMessage);
         list.add(msg);
-        log.info(receiveMessage.toString());
     }
 }

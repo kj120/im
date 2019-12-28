@@ -6,4 +6,6 @@ import cn.kj120.im.server.config.Session;
 public interface Authorization<T> {
 
     Session<T> auth(String authString);
+
+    void bind(String authString, String sessionId);
 }
