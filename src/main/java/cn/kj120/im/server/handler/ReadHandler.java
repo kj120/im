@@ -5,15 +5,19 @@ import cn.kj120.im.common.message.ReceiveMessage;
 import cn.kj120.im.common.message.SendMessage;
 import cn.kj120.im.server.store.ChannelHandlerContextCache;
 import cn.kj120.im.server.config.ChannelAttr;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
 @Slf4j
+@ChannelHandler.Sharable
+@Component
 public class ReadHandler extends SimpleChannelInboundHandler<SendMessage> {
 
     @Override

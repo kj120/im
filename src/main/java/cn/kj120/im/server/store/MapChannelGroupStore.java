@@ -1,16 +1,26 @@
 package cn.kj120.im.server.store;
 
 import io.netty.channel.Channel;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * channel内存存储
+ * @author pcg
+ * @date 2019-12-28 11:23:07
+ */
+@Component
 public class MapChannelGroupStore implements ChannelGroupStore {
 
     private ConcurrentHashMap<String, Channel> channelGroup;
+
+    {
+        channelGroup = new ConcurrentHashMap<>(64);
+    }
 
     @Override
     public boolean isExists(String sessionId) {

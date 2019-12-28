@@ -1,13 +1,10 @@
 package cn.kj120.im.server.handler;
 
-import cn.kj120.im.common.CacheManage;
-import cn.kj120.im.common.message.ReceiveMessage;
 import cn.kj120.im.common.message.SendMessage;
-import cn.kj120.im.common.message.SendMessageType;
 import cn.kj120.im.server.auth.Authorization;
 import cn.kj120.im.server.config.ChannelAttr;
 import cn.kj120.im.server.config.Session;
-import cn.kj120.im.server.store.ChannelHandlerContextCache;
+import cn.kj120.im.server.store.ChannelGroupStore;
 import cn.kj120.im.server.util.SendUtils;
 import cn.kj120.im.server.util.SessionUtil;
 import io.netty.channel.ChannelHandler;
@@ -15,21 +12,22 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Slf4j
 @ChannelHandler.Sharable
+@Component
 public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
 
     private Authorization authorization;
 
-    private CacheManage<String, ChannelHandlerContext> cacheManage;
+    private ChannelGroupStore channelGroupStore;
 
-    {
-        cacheManage = ChannelHandlerContextCache.singleten();
-    }
-
-    public AuthorizationHandler(Authorization authorization) {
+    @Autowired
+    public AuthorizationHandler(Authorization authorization, ChannelGroupStore channelGroupStore) {
         this.authorization = authorization;
+        this.channelGroupStore = channelGroupStore;
     }
 
     @Override
@@ -41,7 +39,7 @@ public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
                 SendUtils.sendSystemMessage("授权不通过", ctx.channel());
             }else {
                 ctx.channel().attr(ChannelAttr.SESSION).set(session);
-                cacheManage.put(session.getSessionId(), ctx);
+                channelGroupStore.set(session.getSessionId(), ctx.channel());
             }
             ReferenceCountUtil.release(msg);
         } else {
