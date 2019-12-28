@@ -53,6 +53,7 @@ public class ReadHandler extends SimpleChannelInboundHandler<SendMessage> {
     public ReceiveMessage getReceiveMessage(ChannelHandlerContext ctx, SendMessage msg) {
         ReceiveMessage receiveMessage = new ReceiveMessage();
         receiveMessage.setFrom(ctx.channel().attr(ChannelAttr.SESSION).get().getSessionId());
+        receiveMessage.setTime(System.currentTimeMillis());
         receiveMessage.setBody(msg.getBody() + new Random().nextInt(100));
         return receiveMessage;
     }

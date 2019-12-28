@@ -8,6 +8,7 @@ import cn.kj120.im.server.auth.Authorization;
 import cn.kj120.im.server.config.ChannelAttr;
 import cn.kj120.im.server.config.Session;
 import cn.kj120.im.server.store.ChannelHandlerContextCache;
+import cn.kj120.im.server.util.SendUtils;
 import cn.kj120.im.server.util.SessionUtil;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -37,16 +38,15 @@ public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
             SendMessage sendMessage = (SendMessage) msg;
             Session session = authorization.auth(sendMessage.getBody());
             if (session == null) {
-                ReceiveMessage receiveMessage = new ReceiveMessage();
-                receiveMessage.setFrom(SessionUtil.SYSTEM_SESSION_ID);
-                receiveMessage.setBody("授权不通过");
-                ctx.writeAndFlush(receiveMessage);
+                SendUtils.sendSystemMessage("授权不通过", ctx.channel());
             }else {
                 ctx.channel().attr(ChannelAttr.SESSION).set(session);
                 cacheManage.put(session.getSessionId(), ctx);
             }
             ReferenceCountUtil.release(msg);
+        } else {
+            super.channelRead(ctx, msg);
         }
-        super.channelRead(ctx, msg);
+
     }
 }

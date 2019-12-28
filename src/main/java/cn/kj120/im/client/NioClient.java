@@ -9,7 +9,11 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -72,7 +76,12 @@ public class NioClient implements Client {
 
     @Override
     public void onMessage(ReceiveMessage message) {
-        log.info("接收 receive sendMessage :  {}", message);
+        System.err.println();
+        System.err.println("发送者id: " + message.getFrom());
+        System.err.println("消息时间: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(message.getTime())));
+        System.err.println("消息内容: " + message.getBody());
+
+
     }
 
     @Override

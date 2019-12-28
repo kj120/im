@@ -16,6 +16,11 @@ public class ReceiveMessage {
     private String from;
 
     /**
+     * 消息时间
+     */
+    private long time;
+
+    /**
      * 消息体
      */
     private String body;
