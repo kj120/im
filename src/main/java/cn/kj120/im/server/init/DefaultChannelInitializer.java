@@ -1,48 +1,62 @@
 package cn.kj120.im.server.init;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelInitializer;
+import cn.kj120.im.common.codec.ReceiveMessageToStringEncoder;
+import cn.kj120.im.common.codec.StringToSendMessageDecoder;
+import cn.kj120.im.common.message.SendMessage;
+import cn.kj120.im.server.handler.ActiveHandler;
+import cn.kj120.im.server.handler.AuthorizationHandler;
+import cn.kj120.im.server.handler.ExceptionHandler;
+import cn.kj120.im.server.handler.ReadHandler;
+import io.netty.channel.*;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.nio.charset.Charset;
+import java.util.List;
 
 
 @Component
+@Data
 public class DefaultChannelInitializer extends ChannelInitializer<Channel> {
 
-    @Resource(name = "authorizationHandler")
+    @Resource
     private ChannelHandler authorizationHandler;
 
-    @Resource(name = "stringDecoder")
+    @Resource
     private ChannelHandler stringDecoder;
 
-    @Resource(name = "stringEncoder")
+    @Autowired
     private ChannelHandler stringEncoder;
 
-    @Resource(name = "stringToSendMessageDecoder")
+    @Resource
     private ChannelHandler stringToSendMessageDecoder;
 
-    @Resource(name = "receiveMessageToStringEncoder")
+    @Resource
     private ChannelHandler receiveMessageToStringEncoder;
 
-    @Resource(name = "exceptionHandler")
+    @Resource
     private ChannelHandler exceptionHandler;
 
-    @Resource(name = "activeHandler")
+    @Resource
     private ChannelHandler activeHandler;
 
-    @Resource(name = "readHandler")
+    @Resource
     private ChannelHandler readHandler;
-
 
     @Override
     protected void initChannel(Channel channel) throws Exception {
         channel.pipeline()
-                .addLast("stringEncoder", stringEncoder)
-                .addLast("stringDecoder", stringDecoder)
-                .addAfter("stringDecoder", "stringToSendMessageDecoder", stringToSendMessageDecoder)
-                .addAfter("stringEncoder", "receiveMessageToStringEncoder", receiveMessageToStringEncoder)
+                .addLast("stringEncoder", new StringEncoder(Charset.defaultCharset()))
+                .addLast("stringDecoder", new StringDecoder(Charset.defaultCharset()))
+                .addAfter("stringDecoder", "stringToSendMessageDecoder", new StringToSendMessageDecoder())
+                .addAfter("stringEncoder", "receiveMessageToStringEncoder",new ReceiveMessageToStringEncoder())
                 .addLast(exceptionHandler)
                 .addLast(activeHandler)
                 .addLast(authorizationHandler)

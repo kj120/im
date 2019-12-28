@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.nio.charset.Charset;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Configuration
 public class Config {
@@ -20,5 +22,11 @@ public class Config {
     public ChannelHandler stringDecoder() {
         return new StringDecoder(Charset.defaultCharset());
     }
+
+    @Bean
+    public ScheduledExecutorService scheduledExecutorService() {
+        return new ScheduledThreadPoolExecutor(1);
+    }
+
 
 }

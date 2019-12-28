@@ -1,6 +1,7 @@
 package cn.kj120.im.server.store;
 
 import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -14,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2019-12-28 11:23:07
  */
 @Component
+@Slf4j
 public class MapChannelGroupStore implements ChannelGroupStore {
 
     private ConcurrentHashMap<String, Channel> channelGroup;
@@ -34,7 +36,9 @@ public class MapChannelGroupStore implements ChannelGroupStore {
 
     @Override
     public boolean set(String sessionId, Channel channel) {
+
         channelGroup.put(sessionId, channel);
+        log.info("新增链接缓存key: {} , channel: {}", sessionId, channel);
         return true;
     }
 

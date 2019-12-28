@@ -11,6 +11,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,20 +19,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @ChannelHandler.Sharable
 @Component
+@Data
 public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
 
+    @Autowired
     private Authorization authorization;
 
-    private ChannelGroupStore channelGroupStore;
-
     @Autowired
-    public AuthorizationHandler(Authorization authorization, ChannelGroupStore channelGroupStore) {
-        this.authorization = authorization;
-        this.channelGroupStore = channelGroupStore;
-    }
+    private ChannelGroupStore channelGroupStore;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        System.err.println(msg);
         if (!SessionUtil.isAuth(ctx.channel())) {
             SendMessage sendMessage = (SendMessage) msg;
             Session session = authorization.auth(sendMessage.getBody());
