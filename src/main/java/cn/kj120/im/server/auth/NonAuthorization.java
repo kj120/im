@@ -9,10 +9,10 @@ import java.util.Date;
 
 @Slf4j
 @Component
-public class NonAuthorization implements Authorization<String> {
+public class NonAuthorization implements Authorization {
 
     @Override
-    public Session<String> auth(String authString) {
+    public Session auth(String authString) {
         log.info("授权字符串: {}", authString);
         return new Session(SessionUtil.createSessionId(), new Date());
     }
